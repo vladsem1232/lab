@@ -37,7 +37,7 @@ int main(){
    }
    cout<<endl;
    for ( i = 0; i < n; i++){
-    cout<<*(pb+1)<<" ";
+    cout<<*(pb+i)<<" ";
    }
    
 
