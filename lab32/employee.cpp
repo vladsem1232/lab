@@ -80,5 +80,5 @@ float calculatexperience(employee a[], int size, int thisyear) {
 	for (int i = 0;i < size;i++)
 		sum += a[i].getexperience(thisyear);
 
-	return (double)sum / size;
+	return (float)sum / size;
 }
