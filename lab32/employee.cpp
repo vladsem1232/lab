@@ -51,15 +51,20 @@ void employee::setsalary(float sal) {
 	salary = sal;
 }
 
-void employee::calculatebonus(int thisyear) {
-	int experience;
-	experience = thisyear - hireyear;
-	if (experience < 10)
-		bonus = salary * 0.10;
-	else if (experience <= 20)
-		bonus = salary * 0.25;
-	else
-		bonus = salary * 0.40;
+int employee::calculatebonus(int thisyear) 
+{
+	if (getexperience(thisyear)<=10)
+	{
+		return bonus = salary * 0.10;
+	}
+	else if (getexperience(thisyear)<=20)
+	{
+		return bonus = salary * 0.10;
+	}
+	if(getexperience(thisyear)>=25)
+	{
+		return bonus = salary * 0.40;
+	}
 }
 
 int employee::getexperience(int thisyear) {
@@ -68,17 +73,93 @@ int employee::getexperience(int thisyear) {
 
 void sortemploys(employee a[], int size, int thisyear) {
 	for (int i = 0;i < size;i++) {
-		for (int j = 0;j = j < size - i - 1;j++) {
-			if (a[j].getexperience(thisyear) > a[j + 1].getexperience(thisyear))
+		for (int j = 1;j = j < size - i - 1;j++) {
+			if (a[i].getexperience(thisyear) > a[j + 1].getexperience(thisyear))
 				swap(a[j], a[j + 1]);
 		}
 	}
 }
+
 
 float calculatexperience(employee a[], int size, int thisyear) {
 	int sum = 0;
 	for (int i = 0;i < size;i++)
 		sum += a[i].getexperience(thisyear);
 
-	return (float)sum / size;
+	return (double)sum / size;
 }
+
+void Vacation::calculateDuration(int thisyear) {
+    int stazh = thisyear - prac.hireyear;
+    float sum = prac.salary + prac.bonus;
+    
+    if (stazh < 10 && sum < 12000)
+        duration = 14;
+    else if (stazh > 25 && sum > 25000)
+        duration = 28;
+    else
+        duration = 21;
+    
+}
+
+void departmentStats(employee a[], int size) {
+    int count = 0;
+    float totalSalary = 0;
+    
+    for (int i = 0; i < size; i++) {
+        count++;
+        totalSalary=totalSalary+a[i].getsalary();
+    
+    	if (count > 0) {
+        	cout << "Department statistics:" << endl;
+       		cout << "Number of employees: " << count << endl;
+    	    cout << "Average salary: " << (totalSalary / count) << endl;
+        	cout<<"Dep: "<<a[i].getdepartment()<<" Workers: "<<a[i].getsurname()<<" Total salary: "<<totalSalary<<endl;
+    	}
+	}
+}
+
+Vacation::Vacation() {
+        startDate = "01.07.2021";
+    }
+    string Vacation::calcDate(int startDay, int Month, int Year, int days) {
+        int endDay = startDay + days;
+
+        if (endDay > 30) {
+            endDay -= 30;
+            Month += 1;
+            if (Month > 12) {
+                Month = 1;
+                Year++;
+            }
+        }
+
+        char buf[11];
+        sprintf(buf, "%02d.%02d.%d", endDay, Month, Year);
+        return string(buf);
+    }
+    void Vacation::set(employee p) {
+        prac=p;
+        int stazh=2025-p.hireyear;
+        float sum=p.salary+p.bonus;
+        if (stazh<10 && sum<12000)
+            duration=14;
+        else if (stazh>25 && sum>25000)
+            duration=28;
+        else
+            duration=21;
+        endDate=calcDate(1, 7, 2021, duration);
+    }
+
+void Vacation::setStartDate(string date) {
+    startDate = date;
+    calculateDuration(2025);
+}
+
+string Vacation::getEndDate() const {
+    return endDate;
+}
+
+   void Vacation::print() {
+        cout<<"Worker: "<<prac.surname<<", Department: "<<prac.department<<", Vacation from "<<startDate<<" for "<< duration <<" days, to "<<endDate<<endl;
+    }
